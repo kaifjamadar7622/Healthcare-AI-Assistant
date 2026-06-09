@@ -86,7 +86,10 @@ class ResponseGenerator:
             "You are a concise healthcare information assistant. Answer only from the provided context. "
             "If the context does not contain the answer, say you do not know. Do not guess or invent facts. "
             "Keep the response clear, professional, and brief. Do not give a diagnosis or unsafe medical advice. "
-            "Always include a brief safety note.\n\n"
+            "Use this exact format:\n"
+            "Answer: one short paragraph.\n"
+            "Key points: 2 to 4 short bullets.\n"
+            "Safety note: one short sentence.\n\n"
             f"Question: {question}\n\nContext:\n{context}"
         )
         completion = self._client.chat.completions.create(  # type: ignore[union-attr]
@@ -105,7 +108,10 @@ class ResponseGenerator:
             "You are a concise healthcare information assistant. Answer only from the provided context. "
             "If the context does not contain the answer, say you do not know. Do not guess or invent facts. "
             "Keep the response clear, professional, and brief. Do not give a diagnosis or unsafe medical advice. "
-            "Always include a brief safety note.\n\n"
+            "Use this exact format:\n"
+            "Answer: one short paragraph.\n"
+            "Key points: 2 to 4 short bullets.\n"
+            "Safety note: one short sentence.\n\n"
             f"Question: {question}\n\nContext:\n{context}"
         )
         payload = json.dumps(
@@ -138,30 +144,39 @@ class ResponseGenerator:
         has_documents: bool,
         emergency_flag: bool,
     ) -> str:
-        lines = [
-            "Here is a concise, safety-focused response:",
-        ]
+        key_points: list[str] = []
 
         if emergency_flag:
-            lines.append(self.config.emergency_disclaimer)
+            key_points.append(self.config.emergency_disclaimer)
 
         if retrieved_documents:
-            lines.append("Based on the retrieved guidance, the most relevant points are:")
             for match in retrieved_documents:
-                # include a short excerpt instead of the whole document for readability
                 excerpt = match.document.text.replace('\n', ' ').strip()
-                if len(excerpt) > 400:
-                    excerpt = excerpt[:400].rsplit(' ', 1)[0] + '...'
-                lines.append(f"- {match.document.title}: {excerpt}")
+                if len(excerpt) > 180:
+                    excerpt = excerpt[:180].rsplit(' ', 1)[0] + '...'
+                key_points.append(f"{match.document.title}: {excerpt}")
+                if len(key_points) >= 3:
+                    break
         elif not has_documents:
-            lines.append(
+            key_points.append(
                 "No documents are indexed yet. Upload PDFs, images, or text files through the API to start retrieval."
             )
         else:
-            lines.append(
+            key_points.append(
                 "I could not find a strong match in the local knowledge base, so I recommend confirming details with a clinician."
             )
 
-        lines.append(f"Question understood: {question.strip()}")
-        lines.append(self.config.medical_safety_note)
+        lines = [
+            "Answer: I found the most relevant information in the uploaded documents and summarized it below.",
+            "",
+            "Key points:",
+        ]
+        lines.extend(f"- {point}" for point in key_points)
+        lines.extend(
+            [
+                "",
+                f"Question: {question.strip()}",
+                f"Safety note: {self.config.medical_safety_note}",
+            ]
+        )
         return "\n".join(lines)
