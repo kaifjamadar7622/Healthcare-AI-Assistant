@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Healthcare AI Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <h1>Healthcare AI Assistant</h1>
+        <p class="tagline">Upload reports, ask medical questions (informational only)</p>
+      </div>
+    </header>
+
+    <main class="container main-grid">
+      <section class="card">
+        <h2>Upload Documents</h2>
+        <form id="upload-form">
+          <input id="file-input" type="file" name="files" multiple />
+          <button id="upload-btn" type="submit" class="btn primary">Upload & Ingest</button>
+        </form>
+        <div id="upload-result" class="result"></div>
+      </section>
+
+      <section class="card">
+        <h2>Ask a Question</h2>
+        <form id="ask-form">
+          <textarea id="question" placeholder="Type a healthcare question..." rows="4"></textarea>
+          <div class="row">
+            <button id="ask-btn" type="submit" class="btn accent">Ask</button>
+            <button id="clear-btn" type="button" class="btn">Clear</button>
+          </div>
+        </form>
+
+        <div id="meta" class="meta"></div>
+        <div id="answer" class="answer"></div>
+        <div class="sources-header">
+          <button id="toggle-sources" type="button" class="btn small">Show sources</button>
+        </div>
+        <div id="sources" class="sources hidden"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">Demo UI • Informational only • See README for details</div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

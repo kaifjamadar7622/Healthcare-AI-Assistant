@@ -1,0 +1,5 @@
+Telehealth Consultation Guidelines
+
+Medication refill requests may be reviewed during telehealth visits if the medication
+is already prescribed and does not require an in-person evaluation.
+Patients should confirm identity, current medications, and recent symptoms before the visit.

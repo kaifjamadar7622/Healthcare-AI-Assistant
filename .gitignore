@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Data and runtime files
+data/*
+!data/sample_docs/
+!data/sample_docs/**
+vector_store/
+*.sqlite3
+
+# Environment variables / secrets
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# Ignore assignment PDF explicitly
+assignment.pdf
+
+# Allow example env to be tracked
+!.env.example
